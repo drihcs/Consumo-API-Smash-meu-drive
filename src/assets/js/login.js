@@ -1,26 +1,54 @@
-const supabase = supabase.createClient(
-    'https://vqtpugingdnfmvhyjtpl.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxdHB1Z2luZ2RuZm12aHlqdHBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzOTYzMjcsImV4cCI6MjA2MTk3MjMyN30.m559pKa2z3d1ca6YhmrrdinTtC60xJBtXQb1z2nWzwo'
-  );
-  
-  async function login(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
+document.addEventListener("DOMContentLoaded", function () {
+  // MODAL DE CRIAR CONTA
+  const registerModal = document.getElementById("registerModal");
+  const openRegisterModal = document.getElementById("openModal");
+  const closeRegisterModal = document.getElementById("closeModal");
+
+  if (openRegisterModal && registerModal && closeRegisterModal) {
+    openRegisterModal.addEventListener("click", function (e) {
+      e.preventDefault();
+      registerModal.style.display = "flex";
     });
-  
-    if (error) {
-      alert('Erro: ' + error.message);
-    } else {
-      alert('Login bem-sucedido!');
-      // exemplo: redirecionar para dashboard
-      // window.location.href = 'dashboard.html';
-    }
+
+    closeRegisterModal.addEventListener("click", function () {
+      registerModal.style.display = "none";
+    });
+
+    window.addEventListener("click", function (e) {
+      if (e.target === registerModal) {
+        registerModal.style.display = "none";
+      }
+    });
   }
-  
-  document.getElementById('login-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = document.getElementById('email').value;
-    const senha = document.getElementById('password').value;
-    login(email, senha);
-  });
+
+  // MODAL DE ESQUECI A SENHA
+  const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+  const openForgotPasswordModal = document.getElementById("forgotPasswordLink");
+  const closeForgotPasswordModal = document.getElementById("closeForgotPasswordModal");
+
+  if (openForgotPasswordModal && forgotPasswordModal && closeForgotPasswordModal) {
+    openForgotPasswordModal.addEventListener("click", function (e) {
+      e.preventDefault();
+      forgotPasswordModal.style.display = "flex";
+    });
+
+    closeForgotPasswordModal.addEventListener("click", function () {
+      forgotPasswordModal.style.display = "none";
+    });
+
+    window.addEventListener("click", function (e) {
+      if (e.target === forgotPasswordModal) {
+        forgotPasswordModal.style.display = "none";
+      }
+    });
+  }
+
+  // REDIRECIONAMENTO DO LOGIN
+  const loginForm = document.getElementById("login-form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      window.location.href = "dashboard.html";
+    });
+  }
+});
