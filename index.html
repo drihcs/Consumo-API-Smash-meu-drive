@@ -5,20 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Minha Nuvem</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/toggle.css">
+    <link rel="stylesheet" href="assets/css/variables.css">
     <script src="https://unpkg.com/phosphor-icons@1.4.0"></script>
-       <script src="script.js" defer></script>
-    <script src="toggle.js" ></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-v1nQZQyaL9i5q1vCz5Cq6jAeUytfMb/y4RkgXYcQHZ5ElVqZq8AKZQuWk+E3kXOBLRzG1HbbF1gMJqNbmTSp2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-v1nQZQyaL9i5q1vCz5Cq6jAeUytfMb/y4RkgXYcQHZ5ElVqZq8AKZQuWk+E3kXOBLRzG1HbbF1gMJqNbmTSp2g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
 <body class="login-page">
     <button id="themeToggle">
-        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun block [html.light_&amp;]:block [html.dark_&amp;]:hidden">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-sun block [html.light_&amp;]:block [html.dark_&amp;]:hidden">
             <circle cx="12" cy="12" r="4"></circle>
             <path d="M12 2v2"></path>
             <path d="M12 20v2"></path>
@@ -28,29 +32,32 @@
             <path d="M20 12h2"></path>
             <path d="m6.34 17.66-1.41 1.41"></path>
             <path d="m19.07 4.93-1.41 1.41"></path>
-          </svg>
-          
-          <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon hidden [html.dark_&amp;]:block [html.light_&amp;]:hidden">
+        </svg>
+
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-moon hidden [html.dark_&amp;]:block [html.light_&amp;]:hidden">
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-          </svg>
+        </svg>
     </button>
-    
+
     <img class="logo-header" width="32" height="32" src="images/logo.png" alt="Logo">
     <h5 class="header">Minha Nuvem</h5>
 
     <div class="login-container">
         <img class="logo-img" src="images/logo.png" alt="Logo Principal">
-        <div class="title"><h1>Minha Nuvem</h1>
-        <p>Armazenamento de dados</p>
+        <div class="title">
+            <h1>Minha Nuvem</h1>
+            <p>Armazenamento de dados</p>
         </div>
         <form id="loginForm">
             <div class="inputLogin">
-              <label for="email">Email:</label>
-              <input id="email" type="email" placeholder="E-mail" required />
+                <label for="email">Email:</label>
+                <input id="email" type="email" placeholder="E-mail" required />
             </div>
             <div class="inputLogin">
-              <label for="password">Senha:</label>
-              <input id="password" type="password" placeholder="Senha" required />
+                <label for="password">Senha:</label>
+                <input id="password" type="password" placeholder="Senha" required />
             </div>
             <div class="remember-forgot">
                 <div class="remember-me">
@@ -62,7 +69,7 @@
 
             <button type="submit">Entrar</button>
             <p>Não tem uma conta? <a href="#" id="openModal">Criar conta</a></p>
-          </form>
+        </form>
     </div>
 
     <!-- Modal de Cadastro -->
@@ -104,6 +111,8 @@
     <footer>
         <p class="footer">© Minha Nuvem - 2025</p>
     </footer>
+    <script src="assets/js/login.js"></script>
+    <script src="assets/js/toggle.js"></script>
 </body>
 
 </html>

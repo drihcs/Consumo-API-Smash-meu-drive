@@ -1,54 +1,3 @@
-<!DOCTYPE html>
-<html lang="en-US">
-
-<head>
-  <meta charset="UTF-8" />
-  <script src="https://unpkg.com/@smash-sdk/uploader/dist/SmashUploader.browser.js"></script>
-  <style>
-    table {
-      margin-top: 20px;
-      border-collapse: collapse;
-      width: 100%;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-
-    th {
-      background-color: #f2f2f2;
-      text-align: left;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
-</head>
-
-<body>
-  <form name="uploadForm">
-    <label for="folderUpload">Select a folder to upload:</label><br>
-    <input type="file" id="uploadInput" webkitdirectory directory multiple>
-    <input type="button" onclick="upload();" value="Send file(s)">
-  </form>
-
-  <div id="mensagemCarregando" class="hidden">Uploading, please wait...</div>
-  <div id="mensagemErro" class="hidden" style="color: red;"></div>
-
-  <table id="tabelaArquivos" class="hidden">
-    <thead>
-      <tr>
-        <th>Nome do Arquivo</th>
-        <th>Tamanho</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="corpoTabelaArquivos"></tbody>
-  </table>
-
-  <script>
     async function upload() {
       const fileInput = document.getElementById("uploadInput");
       const tabela = document.getElementById("tabelaArquivos");
@@ -104,7 +53,3 @@
         console.log("Progresso:", event.data.progress.percent + "%");
       });
     }
-  </script>
-</body>
-
-</html>
