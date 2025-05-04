@@ -1,0 +1,404 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+body {
+  background: var(--cor-fundo-principal);
+  color: var(--cor-texto);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  /* Adiciona espaço para o header fixo */
+}
+
+body.dark #sunIcon {
+  stroke: #f9fafb;
+}
+
+#themeToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transition: transform 0.3s;
+  z-index: 10;
+}
+
+#themeToggle:hover {
+  transform: scale(1.1);
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 60px;
+  background-color: var(--cor-fundo-principal);
+  color: var(--cor-texto);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.right-header {
+  display: flex;
+  align-items: center;
+  gap: 20px; 
+  padding: 40px;
+}
+
+#themeToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s;
+  z-index: 10;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Garante que o avatar e o nome/usuário fiquem separados */
+}
+
+.user-info img {
+  border-radius: 50%;
+  width: 30px; /* Ajuste o tamanho do ícone de visitante */
+  height: 30px; /* Ajuste o tamanho do ícone de visitante */
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.search-container input {
+  padding-left: 40px; /* espaço para o ícone */
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--cor-sidebar);
+  color: var(--cor-texto);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+}
+
+img {
+  border-radius: 50%;
+}
+
+.app-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.app-layout {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.left-sidebar, .right-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  height: 100%;
+}
+
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  height: auto; /* Permite altura fluida com base no conteúdo */
+  max-height: calc(100vh - 120px); /* Limita a altura para não estourar a tela */
+  top: 60px;
+  bottom: 20px; /* IMPORTANTE: espaço do rodapé */
+  margin: 20px 0 20px 20px; /* topo, dir, baixo, esq */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.storage-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 1rem;
+}
+
+/* Garantir que o conteúdo principal fique em cima */
+.sidebar-content,
+#quickAccessList {
+  flex-grow: 1;
+}
+ 
+li {
+ list-style-type: none;
+}
+
+#quickAccessList i{
+  margin:10px;
+  margin-bottom: 0;
+  padding: 10px;
+  padding-bottom: 0;
+  font-size: 56px;
+  list-style-type: none;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+ }
+
+ h5 {
+  text-align: center;
+ }
+
+/* Estilo para o armazenamento */
+.storage-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--cor-sidebar);
+  color: var(--cor-texto);
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 160px;
+}
+
+.progress-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-circle {
+  transform: rotate(-90deg);
+}
+
+circle {
+  fill: none;
+  stroke-width: 2;
+}
+
+.bg {
+  stroke: #e5e7eb;
+}
+
+.progress {
+  stroke: #3b82f6;
+  stroke-dasharray: 314; /* 2 * PI * 50 (raio) */
+  stroke-dashoffset: 314;
+  transition: stroke-dashoffset 1s ease;
+}
+
+.progress-text {
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--cor-texto);
+}
+
+.progress-text-sub {
+  font-size: 12px;
+}
+
+/* Estilo para o histórico */
+.history-info {
+  font-size: 0.875rem;
+  color: var(--text-color);
+  margin-top: 1rem;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.history-info ul {
+  list-style: none;
+  padding-left: 10px;
+  margin: 0;
+}
+
+.left-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 220px;
+  max-height: calc(100vh - 100px); /* Reduzi para dar espaço a margens */
+  margin: 10px 0 10px 10px; /* topo, direita, baixo, esquerda */
+  border-radius: 16px;
+  background-color: var(--cor-sidebar);
+  color: var(--cor-texto);
+  padding: 20px;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* flutuante */
+}
+
+.sidebar-content {
+  flex-grow: 1;
+}
+
+.left-sidebar ul {
+  list-style-type: none; /* Remove os marcadores */
+  padding-left: 0; /* Remove o recuo padrão da lista */
+}
+
+.left-sidebar li {
+  padding: 10px 0; /* Ajuste de espaçamento para os itens */
+}
+
+.right-sidebar {
+  width: 220px;
+  max-height: calc(100vh - 100px);
+  margin: 10px 10px 10px 0;
+  border-radius: 16px;
+  background-color: var(--cor-sidebar);
+  color: var(--cor-texto);
+  padding: 20px;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.right-sidebar .sidebar-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-grow: 1;
+  gap: 1rem; /* Espaço entre os itens */
+}
+
+.history-info {
+  font-size: 0.875rem;
+  color: var(--cor-texto);
+  margin-top: 1rem;
+  overflow-y: auto;
+  max-height: 70%;  /* Limita a altura para não extrapolar a tela */
+}
+
+.history-info ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.history-info li {
+  padding: 10px 0;
+}
+
+
+.main-content {
+  background-color: var(--cor-sidebar);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  margin: 20px 240px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  height: calc(100vh - 100px); /* altura igual às sidebars */
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.upload-area {
+  border-radius: 12px;
+  border: 2px dashed var(--cor-borda-upload);
+  background-color: var(#3b82f6); /* Ou adaptar para tema escuro depois */
+  text-align: center;
+  padding: 40px 20px;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.upload-area:hover {
+  background-color: var(--cor-fundo-upload);
+  cursor: pointer;
+}
+
+.upload-area p {
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.upload-area button {
+  padding: 8px 16px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.file-list {
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+}
+
+.file-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.file-list h4 { 
+  padding-left: 8px;
+  text-align: center;
+}
+
+.file-list th,
+.file-list td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.75rem;
+}
+
+.file-list tr{
+  border-radius: 50%;
+}
+.app-footer {
+  width: 100%;
+  height: 50px;
+  background-color: var(--cor-fundo-principal);
+  color: var(--cor-texto);
+  text-align: center;
+  line-height: 50px;
+  position: absolute;
+  bottom: 0;
+}
+

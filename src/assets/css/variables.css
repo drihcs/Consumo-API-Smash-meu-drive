@@ -1,0 +1,21 @@
+:root {
+    --cor-fundo-modal: #1E1E1E;
+    --cor-borda-upload: #3b82f6;
+    --cor-icone-pasta: #4A90E2;
+    --cor-texto: #FFFFFF;
+    --cor-progresso: #4A90E2;
+    --cor-erro: #E74C3C;
+    --cor-erro-detalhes: #C0392B;
+    --cor-sucesso: #27AE60;
+    --cor-status-texto: #BDC3C7;
+  
+    /* Extras adaptados do seu CSS */
+    --cor-fundo-principal: #1f2937;
+    --cor-fundo-upload: #0c1930;
+    --cor-header-footer: #1f2937;
+    --cor-sidebar: #111827;
+    --cor-input: #fff;
+    --cor-borda-clara: #e5e7eb;
+    --cor-sombra-leve: rgba(0, 0, 0, 0.05);
+  }
+  

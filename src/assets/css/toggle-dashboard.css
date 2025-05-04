@@ -1,0 +1,84 @@
+/* Tema claro */
+body.light {
+    background-color: #f9fafb;
+    /* Cor de fundo clara */
+    color: #111827;
+    /* Cor do texto no tema claro */
+}
+
+body.light .app-header {
+    background-color: #ffffff;
+    color: #111827;
+}
+
+body.light .left-sidebar,
+body.light .right-sidebar {
+    background-color: #f3f4f6;
+    color: #111827;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+body.light .storage-info {
+    border: 1px solid var(--cor-sidebar);
+    background-color: var(--cor-texto);
+    color: var(--cor-texto);
+}
+
+body.light .bg {
+    stroke: var(--cor-sidebar);
+}
+
+body.light .progress-text,
+body.light .progress-text-sub {
+    color: var(--cor-sidebar);
+}
+
+body.light .main-content {
+    background-color: #ffffff;
+    color: #111827;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+body.light .upload-area {
+    background-color: #e5e7eb;
+    /* Área de upload no tema claro */
+}
+
+body.light .upload-area:hover {
+    background-color: #d1d5db;
+}
+
+body.light .file-list th,
+body.light .file-list td {
+    border-bottom: 1px solid #d1d5db;
+}
+
+body.light .search-container input {
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid #d1d5db;
+}
+
+body.light .user-info {
+    color: #111827;
+}
+
+body.light .app-footer {
+    background-color: #ffffff;
+    color: #111827;
+}
+
+body.light .history-info {
+    background-color: #ffffff;
+    color: #111827;
+}
+
+body.light .progress .progress-text {
+    color: #111827;
+}
+
+body.light #moonIcon {
+    stroke: #4b5563;
+    fill: #4b5563;
+    /* Cor escura para o preenchimento da lua */
+}
