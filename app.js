@@ -77,9 +77,34 @@ function upload() {
         progressBar.style.width = "100%";
         progressText.textContent = "Upload concluído!";
 
-        // Adiciona o arquivo à tabela (verificando se transfer.files existe e tem pelo menos 1 arquivo)
-        const uploadedFile = result?.transfer?.files?.[0];
+        const uploadedFiles = result?.transfer?.files;
+        if (!uploadedFiles || uploadedFiles.length === 0) {
+          console.error("Nenhum arquivo retornado pela API.");
+          showMessage("Upload concluído, mas não foi possível obter os dados do arquivo.", "error");
+          return;
+        }
+        
+        const uploadedFile = uploadedFiles[0];
+        if (!uploadedFile) {
+          console.error("Erro: Nenhum arquivo encontrado na resposta.");
+          return;
+        }
 
+        // Adiciona o arquivo à tabela
+        const fileName = uploadedFile.name || "Arquivo";  
+        const fileSize = formatFileSize(uploadedFile.size);
+        const fileStatus = "Enviado";
+        const fileLink = document.createElement("a");
+        fileLink.href = transferUrl;
+        fileLink.textContent = fileName;
+        fileLink.target = "_blank";
+        fileLink.classList.add("file-link");
+        fileLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          window.open(transferUrl, "_blank");
+        }
+        );
+        
         if (uploadedFile) {
           const row = document.createElement("tr");
           const nameCell = document.createElement("td");
