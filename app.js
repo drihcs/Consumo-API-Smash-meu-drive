@@ -43,6 +43,7 @@ function upload() {
   const su = new SmashUploader({
     region: "us-east-1",
     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MWJmNTRkLTc3ZjktNGU4OC1hYzNmLTcwZjNkYmQ1YTdmNi1ldSIsInVzZXJuYW1lIjoiYTk4MTIzYmEtOTdjYS00OTE2LWIwN2QtYjM1MWEwYWFmZmY1IiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQzNTIyMCwiZXhwIjo0OTAyMTk1MjIwfQ.hILwfE6Xz90J5VBWOP33I3edqSS5DqXJyLRgH6wVDT8",
+    domain: "https://mh-nuvem0729.fromsmash.com/pt",
   });
 
   const progressBar = document.getElementById("progressBar");
@@ -71,30 +72,3 @@ function upload() {
       progressStatus.textContent = "Concluído";
 
       // Adiciona à tabela de arquivos
-      const row = document.createElement("tr");
-
-      const nameCell = document.createElement("td");
-      const link = document.createElement("a");
-      link.href = downloadLink;
-      link.textContent = uploadedFile.name || "Arquivo";
-      link.target = "_blank";
-      nameCell.appendChild(link);
-
-      const sizeCell = document.createElement("td");
-      sizeCell.textContent = formatFileSize(uploadedFile.size || 0);
-
-      const statusCell = document.createElement("td");
-      statusCell.textContent = "Enviado";
-
-      row.appendChild(nameCell);
-      row.appendChild(sizeCell);
-      row.appendChild(statusCell);
-
-      fileTableBody.appendChild(row);
-    })
-    .catch((error) => {
-      console.error("Erro durante o upload:", error);
-      showMessage("Erro ao enviar o arquivo. Tente novamente.", "error");
-      progressStatus.textContent = "Erro";
-    });
-}
