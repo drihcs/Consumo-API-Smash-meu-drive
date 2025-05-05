@@ -387,6 +387,8 @@ circle {
   color: white;
   border: none;
   border-radius: 8px;
+  display: flex;
+  justify-content: left;
 }
 
 .upload-actions button:hover {
