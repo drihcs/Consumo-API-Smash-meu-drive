@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minha Nuvem</title>
+  <link rel="stylesheet" href="src/assets/css/dashboard.css">
+  <link rel="stylesheet" href="src/assets/css/toggle-dashboard.css">
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <script src="app.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fromsmash/smash-uploader@latest/dist/umd/smash-uploader.min.js"></script>
+</head>
+
+<body>
+  <header class="app-header">
+
+    <div class="logo-area">
+      <img src="src/assets/images/logo.png" alt="Logo" width="28" height="28" />
+      <span class="app-name">Minha Nuvem</span>
+    </div>
+    <div class="right-header">
+      <div class="search-container">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"
+          id="search-icon">
+          <path
+            d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z">
+          </path>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Buscar arquivos..." aria-label="Buscar arquivos"
+          oninput="searchFiles()" />
+      </div>
+
+      <div class="user-info">
+        <span id="userName"></span>
+        <img src="src/assets/images/vetor-usuario.png" alt="Usuário" width="28" height="28" />
+      </div>
+
+      <button id="themeToggle">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-sun block [html.light_&amp;]:block [html.dark_&amp;]:hidden">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.41 1.41"></path>
+          <path d="m17.66 17.66 1.41 1.41"></path>
+          <path d="M2 12h2"></path>
+          <path d="M20 12h2"></path>
+          <path d="m6.34 17.66-1.41 1.41"></path>
+          <path d="m19.07 4.93-1.41 1.41"></path>
+        </svg>
+
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-moon hidden [html.dark_&amp;]:block [html.light_&amp;]:hidden">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+      </button>
+
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="left-sidebar">
+      <div class="sidebar-content">
+        <nav>
+          <ul>
+            <li><i class="ph ph-house"></i>Início</li>
+            <li><i class="ph ph-folder"></i>Meus Arquivos</li>
+            <li><i class="ph ph-star"></i>Favoritos</li>
+            <li><i class="ph ph-clock-counter-clockwise"></i>Recentes</li>
+            <li><i class="ph ph-trash"></i>Lixeira</li>
+          </ul>
+        </nav>
+      </div>
+      <div class="storage-info">
+        <div class="progress-container">
+          <svg class="progress-circle" width="120" height="120">
+            <circle class="bg" cx="60" cy="60" r="50"></circle>
+            <circle class="progress" cx="60" cy="60" r="50"></circle>
+          </svg>
+          <div class="progress-text" id="progress-text">0%</div>
+        </div>
+        <div class="progress-text-sub" id="progress-text">
+          <p><strong>Armazenamento:</strong></p>
+          <p>1,05 GB de 5 GB usados</p>
+        </div>
+      </div>
+
+      <div>
+        <ul>
+          <li><i class="ph ph-gear"></i>Configurações</li>
+      </div>
+  </div>
+  </div>
+  </aside>
+
+  <main class="main-content">
+
+    <h4>Adicionar:</h4>
+    <section class="upload-area" id="dropzone">
+      <p>Arraste e solte os arquivos aqui ou clique para selecionar</p>
+      <input type="file" id="fileInput" multiple hidden />
+      <button onclick="document.getElementById('fileInput').click()">Selecionar arquivos</button>
+
+      </form>
+    </section>
+
+    <section class="file-list">
+      <h4>Arquivos Enviados</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Tamanho</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="fileTableBody">
+
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <aside class="right-sidebar">
+    <h3>Acesso Rápido</h3>
+    <ul id="quickAccessList">
+
+      <li><i class="ph-fill ph-file-doc"></i></li>
+      <h5>Estudo de caso.doc</h5>
+      <li><i class="ph-fill ph-file-image"></i></li>
+      <h5>Férias.jpg</h5>
+      <li><i class="ph-fill ph-file-text"></i></li>
+      <h5>Anotações.txt</h5>
+      <li><i class="ph-fill ph-file-archive"></i></li>
+      <h5>Arquivos.zip</h5>
+    </ul>
+
+    <div class="history-info">
+      <h4>Histórico</h4>
+      <ul>
+        <li>01/05/2025 – Upload</li>
+        <li>28/04/2025 – Exclusão</li>
+        <li>25/04/2025 – Favorito</li>
+      </ul>
+    </div>
+  </aside>
+  </div>
+
+  <script src="src/assets/js/dashboard.js"></script>
+    <script src="src/assets/js/toggle-dashboard.js"></script>
+    <script src="src/assets/js/app.js"></script>
+</body>
+
+</html>
