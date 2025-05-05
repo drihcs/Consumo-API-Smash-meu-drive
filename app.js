@@ -1,55 +1,39 @@
 async function upload() {
-  const fileInput = document.getElementById("uploadInput");
-  const tabela = document.getElementById("tabelaArquivos");
-  const corpoTabela = document.getElementById("corpoTabelaArquivos");
-  const mensagemCarregando = document.getElementById("mensagemCarregando");
-  const mensagemErro = document.getElementById("mensagemErro");
+  const fileInput = document.getElementById("fileInput");
+  const progressContainer = document.getElementById("progressContainer");
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+  const progressStatus = document.getElementById("progressStatus");
 
-  mensagemCarregando.classList.remove("hidden");
-  mensagemErro.classList.add("hidden");
-  corpoTabela.innerHTML = "";
+  // Exibe a barra de progresso
+  progressContainer.style.display = "block";
 
   const su = new SmashUploader({
     region: "us-east-1",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  });
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpXVCIsImlhdCI6MTYxNjQ5NzYwMCwiZXhwIjoxNjE2NTY5NjAwfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5ceyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjY2NTM5LWJmYzMtNDYxYy05ZWRhLTI3YjY5N2U3ODY4Yi1ldSIsInVzZXJuYW1lIjoiMGMyODBlYjItYTM2My00NWUxLWFhZmQtZmQwZjBjZTY4NDNiIiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQxMDg4MiwiZXhwIjo0OTAyMTcwODgyfQ.bAjLzkJnlzP3JFIxHNbAaNulxp1CmBK15Aaa3I8gBNs",
+    });
 
-  const parsedFiles = [...fileInput.files].map(file => ({
-    name: file.webkitRelativePath,
-    file
-  }));
+  const files = [...fileInput.files];
 
   try {
-    const transfer = await su.upload({
-      files: parsedFiles,
-      domain: "mh-nuvem0729.fromsmash.com"
+    const transfer = await su.upload({ files: files });
+
+    su.on('progress', (event) => {
+      const percent = Math.floor(event.data.progress.percent);
+      progressBar.style.width = percent + "%"; // Atualiza a barra de progresso
+      progressText.textContent = percent + "%"; // Exibe a porcentagem
     });
 
-    mensagemCarregando.classList.add("hidden");
-    tabela.classList.remove("hidden");
-
-    transfer.files.forEach(file => {
-      const linha = document.createElement("tr");
-      const fileUrl = `https://${transfer.domain}/${file.path}`;
-
-      linha.innerHTML = `
-        <td><a href="${fileUrl}" target="_blank">${file.name}</a></td>
-        <td>${(file.size / 1024).toFixed(2)} KB</td>
-        <td>Enviado com sucesso</td>
-      `;
-      corpoTabela.appendChild(linha);
+    // Após o upload ser completado
+    transfer.on('end', () => {
+      progressStatus.textContent = "Upload Concluído!";
+      setTimeout(() => {
+        progressContainer.style.display = "none"; // Oculta a barra de progresso após a conclusão
+      }, 2000); // Espera 2 segundos para ocultar
     });
-
-    console.log("Transferência concluída:", transfer);
 
   } catch (error) {
-    mensagemCarregando.classList.add("hidden");
-    mensagemErro.classList.remove("hidden");
-    mensagemErro.textContent = "Erro ao enviar arquivos.";
     console.error("Erro no upload:", error);
+    progressStatus.textContent = "Erro ao enviar!";
   }
-
-  su.on('progress', (event) => {
-    console.log("Progresso:", event.data.progress.percent + "%");
-  });
 }
