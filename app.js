@@ -44,7 +44,7 @@ function upload() {
 
   const su = new SmashUploader({
     region: "us-east-1",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MWJmNTRkLTc3ZjktNGU4OC1hYzNmLTcwZjNkYmQ1YTdmNi1ldSIsInVzZXJuYW1lIjoiYTk4MTIzYmEtOTdjYS00OTE2LWIwN2QtYjM1MWEwYWFmZmY1IiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQzNTIyMCwiZXhwIjo0OTAyMTk1MjIwfQ.hILwfE6Xz90J5VBWOP33I3edqSS5DqXJyLRgH6wVDT8",
+    token: "seu-token-aqui", // Insira o token de autenticação
     domain: "https://mh-nuvem0729.fromsmash.com/pt",
   });
 
@@ -54,6 +54,7 @@ function upload() {
   const progressStatus = document.getElementById("progressStatus");
   const fileTableBody = document.getElementById("fileTableBody");
 
+  // Exibe a barra de progresso
   progressContainer.style.display = "block";
   progressBar.style.width = "0%";
   progressText.textContent = "0%";
@@ -67,6 +68,8 @@ function upload() {
 
   su.upload({ files })
     .then((result) => {
+      console.log(result); // Verifique a estrutura de 'result'
+
       const transferUrl = result?.transfer?.transferUrl;
 
       if (transferUrl) {
@@ -74,11 +77,9 @@ function upload() {
         progressBar.style.width = "100%";
         progressText.textContent = "Upload concluído!";
 
-        // Exibe a URL de download do arquivo
-        console.log("Link do arquivo enviado:", transferUrl);
+        // Adiciona o arquivo à tabela (verificando se transfer.files existe e tem pelo menos 1 arquivo)
+        const uploadedFile = result?.transfer?.files?.[0];
 
-        // Adiciona o arquivo à tabela
-        const uploadedFile = result?.transfer?.files[0];
         if (uploadedFile) {
           const row = document.createElement("tr");
           const nameCell = document.createElement("td");
@@ -99,6 +100,8 @@ function upload() {
           row.appendChild(statusCell);
 
           fileTableBody.appendChild(row);
+        } else {
+          console.error("Erro: Nenhum arquivo encontrado na resposta.");
         }
       } else {
         console.error("Erro: transferUrl não encontrado.");
