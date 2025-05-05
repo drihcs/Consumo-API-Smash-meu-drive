@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (loginForm) {
     loginForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      window.location.href = "assets/dashboard.html";
+      window.location.href = "dashboard.html";
     });
   }
 });
