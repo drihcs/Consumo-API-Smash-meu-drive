@@ -1,5 +1,5 @@
 // Importar o SmashUploader
-import { SmashUploader } from "https://cdn.jsdelivr.net/npm/@smash-sdk/uploader@latest/dist/index.min.js"
+import { SmashUploader } from "https://unpkg.com/@smash-sdk/uploader/dist/SmashUploader.browser.js"
 
 // Variáveis globais
 let selectedFiles = []
@@ -154,7 +154,7 @@ function updateFileSelection() {
 function initializeUploader() {
   try {
     uploader = new SmashUploader({
-      region: "eu-west-3",
+      region: "us-east-1",
       token:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjY2NTM5LWJmYzMtNDYxYy05ZWRhLTI3YjY5N2U3ODY4Yi1ldSIsInVzZXJuYW1lIjoiMGMyODBlYjItYTM2My00NWUxLWFhZmQtZmQwZjBjZTY4NDNiIiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQxMDg4MiwiZXhwIjo0OTAyMTcwODgyfQ.bAjLzkJnlzP3JFIxHNbAaNulxp1CmBK15Aaa3I8gBNs", // Substitua por sua chave real
     })
