@@ -1,72 +1,74 @@
-// Espera a página ser carregada
-document.addEventListener("DOMContentLoaded", () => {
-  // Seu código existente de upload
-  const MAX_SIZE_MB = 5; // 5 MB
+function upload() {
+  const fileInput = document.getElementById("fileInput");
+  const files = [...fileInput.files];
 
-  function showMessage(message, type) {
-    const uploadStatus = document.getElementById("uploadStatus");
-    const statusText = document.getElementById("statusText");
-
-    statusText.textContent = message;
-    uploadStatus.style.display = "block";
-
-    if (type === "error") {
-      statusText.className = "error-message";
-    } else {
-      statusText.className = "success-message";
-    }
+  if (files.length === 0) {
+    showMessage("Nenhum arquivo selecionado.", "error");
+    return;
   }
 
-  function formatFileSize(bytes) {
-    const units = ["B", "KB", "MB", "GB"];
-    let size = bytes;
-    let unit = 0;
-    while (size >= 1024 && unit < units.length - 1) {
-      size /= 1024;
-      unit++;
-    }
-    return `${size.toFixed(2)} ${units[unit]}`;
+  const oversized = files.find((file) => file.size > MAX_SIZE_MB * 1024 * 1024);
+  if (oversized) {
+    showMessage(`O arquivo "${oversized.name}" excede 5MB.`, "error");
+    return;
   }
 
-  function upload() {
-    const fileInput = document.getElementById("fileInput");
-    const files = [...fileInput.files];
+  const su = new SmashUploader({
+    region: "us-east-1",
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MWJmNTRkLTc3ZjktNGU4OC1hYzNmLTcwZjNkYmQ1YTdmNi1ldSIsInVzZXJuYW1lIjoiYTk4MTIzYmEtOTdjYS00OTE2LWIwN2QtYjM1MWEwYWFmZmY1IiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQzNTIyMCwiZXhwIjo0OTAyMTk1MjIwfQ.hILwfE6Xz90J5VBWOP33I3edqSS5DqXJyLRgH6wVDT8",
+    domain: "https://mh-nuvem0729.fromsmash.com/pt",
+  });
 
-    if (files.length === 0) {
-      showMessage("Nenhum arquivo selecionado.", "error");
-      return;
-    }
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+  const progressContainer = document.getElementById("progressContainer");
+  const progressStatus = document.getElementById("progressStatus");
+  const fileTableBody = document.getElementById("fileTableBody");
 
-    const oversized = files.find((file) => file.size > MAX_SIZE_MB * 1024 * 1024);
-    if (oversized) {
-      showMessage(`O arquivo "${oversized.name}" excede 5MB.`, "error");
-      return;
-    }
+  progressContainer.style.display = "block"; // Exibe o container de progresso
+  progressBar.style.width = "0%"; // Inicia a barra de progresso com 0%
+  progressText.textContent = "0%"; // Inicia o texto de progresso com 0%
+  progressStatus.textContent = "Enviando..."; // Inicia o status
 
-    const su = new SmashUploader({
-      region: "us-east-1",
-      token: "seu_token_aqui",
-      domain: "https://mh-nuvem0729.fromsmash.com/pt",
+  su.on("progress", (data) => {
+    const percent = Math.round((data.loaded / data.total) * 100);
+    progressBar.style.width = percent + "%"; // Atualiza a barra de progresso
+    progressText.textContent = percent + "%"; // Atualiza o texto de percentual
+  });
+
+  su.upload({ files: files })
+    .then((transfer) => {
+      const uploadedFile = transfer.files[0];
+      const downloadLink = uploadedFile.url;
+
+      showMessage("Arquivo enviado com sucesso!", "success");
+      progressStatus.textContent = "Concluído"; // Atualiza o status para concluído
+
+      // Adiciona à tabela de arquivos
+      const row = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      const link = document.createElement("a");
+      link.href = downloadLink;
+      link.textContent = uploadedFile.name || "Arquivo";
+      link.target = "_blank";
+      nameCell.appendChild(link);
+
+      const sizeCell = document.createElement("td");
+      sizeCell.textContent = formatFileSize(uploadedFile.size || 0);
+
+      const statusCell = document.createElement("td");
+      statusCell.textContent = "Enviado";
+
+      row.appendChild(nameCell);
+      row.appendChild(sizeCell);
+      row.appendChild(statusCell);
+
+      fileTableBody.appendChild(row);
+    })
+    .catch((error) => {
+      console.error("Erro durante o upload:", error);
+      showMessage("Erro ao enviar o arquivo. Tente novamente.", "error");
+      progressStatus.textContent = "Erro";
     });
-
-    const progressBar = document.getElementById("progressBar");
-    const progressText = document.getElementById("progressText");
-    const progressContainer = document.getElementById("progressContainer");
-    const progressStatus = document.getElementById("progressStatus");
-    const fileTableBody = document.getElementById("fileTableBody");
-
-    progressContainer.style.display = "block";
-    progressBar.style.width = "0%";
-    progressText.textContent = "0%";
-    progressStatus.textContent = "Enviando...";
-
-    su.on("progress", (data) => {
-      const percent = Math.round((data.loaded / data.total) * 100);
-      progressBar.style.width = percent + "%";
-      progressText.textContent = percent + "%";
-    });
-
-    su.upload({ files: files })
-      .then((transfer) => {
-        const uploadedFile = transfer.files[0];
-        const downloadLink = uploadedFile.url
+}
