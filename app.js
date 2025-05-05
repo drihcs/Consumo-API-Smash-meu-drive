@@ -1,72 +1,77 @@
 async function upload() {
-  const fileInput = document.getElementById("uploadInput");
-  const tabela = document.getElementById("tabelaArquivos");
-  const corpoTabela = document.getElementById("corpoTabelaArquivos");
-  const mensagemCarregando = document.getElementById("mensagemCarregando");
-  const mensagemErro = document.getElementById("mensagemErro");
+  const fileInput = document.getElementById("fileInput");
+  const fileTableBody = document.getElementById("fileTableBody");
+  const progressBar = document.getElementById("progressBar");
+  const progress = document.getElementById("progress");
+  const uploadStatus = document.getElementById("uploadStatus");
+  const statusText = document.getElementById("statusText");
+  const cancelButton = document.getElementById("cancelButton");
 
-  // Limpa estados anteriores
-  mensagemCarregando.classList.remove("hidden");
-  mensagemErro.classList.add("hidden");
-  mensagemErro.textContent = "";
-  corpoTabela.innerHTML = "";
+  // Mostrar a barra de progresso e status
+  progressBar.style.display = 'block';
+  uploadStatus.style.display = 'block';
+  cancelButton.style.display = 'inline-block';
 
-  // Verifica se há arquivos selecionados
-  if (fileInput.files.length === 0) {
-    mensagemCarregando.classList.add("hidden");
-    mensagemErro.classList.remove("hidden");
-    mensagemErro.textContent = "Selecione pelo menos um arquivo.";
-    return;
-  }
+  statusText.textContent = 'Enviando arquivos...';
 
-  // Inicializa o uploader
+  // Inicialize o uploader - SmashUploader
   const su = new SmashUploader({
-    region: "us-east-1",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
-    domain: "mh-nuvem0729.fromsmash.com",
+      region: "us-east-1",
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjY2NTM5LWJmYzMtNDYxYy05ZWRhLTI3YjY5N2U3ODY4Yi1ldSIsInVzZXJuYW1lIjoiMGMyODBlYjItYTM2My00NWUxLWFhZmQtZmQwZjBjZTY4NDNiIiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQxMDg4MiwiZXhwIjo0OTAyMTcwODgyfQ.bAjLzkJnlzP3JFIxHNbAaNulxp1CmBK15Aaa3I8gBNs", // Certifique-se de usar seu token correto
+      onProgress: (progressData) => {
+          progress.style.width = progressData.percent + '%';
+          progress.textContent = `${progressData.percent.toFixed(2)}%`;
+          statusText.textContent = `Enviando ${progressData.file.name}...`;
+      },
+      onError: (error) => {
+          console.error("Erro no upload:", error);
+          statusText.textContent = 'Erro ao enviar os arquivos.';
+      }
   });
 
-  // Prepara os arquivos para envio
   const parsedFiles = [...fileInput.files].map(file => ({
-    name: file.webkitRelativePath || file.name,
-    file
+      name: file.name,
+      file
   }));
 
   try {
-    const transfer = await su.upload({
-      files: parsedFiles,
-      domain: "mh-nuvem0729.fromsmash.com"
-    });
+      // Realizar upload dos arquivos
+      const transfer = await su.upload({
+          files: parsedFiles,
+          domain: "mh-nuvem0729.fromsmash.com",
+      });
 
-    mensagemCarregando.classList.add("hidden");
-    tabela.classList.remove("hidden");
+      // Quando o upload for concluído
+      statusText.textContent = 'Upload concluído com sucesso!';
+      cancelButton.style.display = 'none';
 
-    // Exibe arquivos na tabela
-    transfer.files.forEach(file => {
-      const linha = document.createElement("tr");
-      const fileUrl = `https://${transfer.domain}/${file.path}`;
+      // Atualizar a tabela de arquivos enviados
+      transfer.files.forEach(file => {
+          const fileUrl = `https://${transfer.domain}/${file.path}`;
+          const row = document.createElement("tr");
 
-      linha.innerHTML = `
-        <td><a href="${fileUrl}" target="_blank">${file.name}</a></td>
-        <td>${(file.size / 1024).toFixed(2)} KB</td>
-        <td>Enviado com sucesso</td>
-      `;
-      corpoTabela.appendChild(linha);
-    });
-
-    console.log("Transferência concluída:", transfer);
-
+          row.innerHTML = `
+              <td><a href="${fileUrl}" target="_blank">${file.name}</a></td>
+              <td>${(file.size / 1024).toFixed(2)} KB</td>
+              <td>Enviado com sucesso</td>
+          `;
+          fileTableBody.appendChild(row);
+      });
   } catch (error) {
-    mensagemCarregando.classList.add("hidden");
-    mensagemErro.classList.remove("hidden");
-    mensagemErro.textContent = "Erro ao enviar arquivos.";
-    console.error("Erro no upload:", error);
+      // Se algo der errado
+      statusText.textContent = 'Erro ao enviar os arquivos.';
+      console.error("Erro no upload:", error);
   }
+}
 
-  // Progresso do upload (opcional)
-  su.on('progress', (event) => {
-    const percent = event.data.progress.percent;
-    console.log(`Progresso: ${percent}%`);
-    // Aqui você pode atualizar uma barra de progresso visual, se quiser
-  });
+// Função para cancelar o upload
+function cancelUpload() {
+  // Caso o SmashUploader ou outro serviço tenha suporte para cancelamento:
+  if (su && typeof su.cancel === 'function') {
+      su.cancel();
+      console.log("Upload cancelado.");
+      statusText.textContent = 'Upload cancelado.';
+  } else {
+      console.log("Cancelamento não suportado.");
+  }
 }
