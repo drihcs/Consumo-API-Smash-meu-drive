@@ -3,10 +3,7 @@ import SmashUploader from "./smash-uploader.js"
 // Função para formatar o tamanho dos arquivos
 function formatFileSize(bytes, si = false, dp = 1) {
   const thresh = si ? 1000 : 1024
-
-  if (Math.abs(bytes) < thresh) {
-    return bytes + " B"
-  }
+  if (Math.abs(bytes) < thresh) return bytes + " B"
 
   const units = si
     ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
@@ -37,10 +34,25 @@ async function sendFiles() {
     return
   }
 
+  // Validação opcional de extensões permitidas
+  const allowedExtensions = ["jpg", "jpeg", "png", "gif", "svg", "webp", "pdf", "doc", "docx", "odt", "txt", "md", "zip", "rar", "7z", "tar", "gz"]
+  const invalidFiles = [...fileInput.files].filter(file => {
+    const ext = file.name.split(".").pop().toLowerCase()
+    return !allowedExtensions.includes(ext)
+  })
+
+  if (invalidFiles.length) {
+    alert("Alguns arquivos possuem formatos não permitidos.")
+    return
+  }
+
   progressBar.style.display = "block"
   uploadStatus.style.display = "block"
   statusText.textContent = "Enviando..."
+  progress.style.width = "0%"
+  progress.style.backgroundColor = "var(--color-primary)"
   sendButton.disabled = true
+  sendButton.textContent = "Enviando..."
 
   const su = new SmashUploader({
     region: "us-east-1",
@@ -67,13 +79,13 @@ async function sendFiles() {
 
     statusText.textContent = "Upload concluído!"
     progress.style.backgroundColor = "var(--color-success)"
+    sendButton.textContent = "Enviar novamente"
 
     transfer.files.forEach((file) => {
       const fileUrl = `https://${transfer.domain}/${file.path}`
       const row = document.createElement("tr")
       row.className = "fade-in"
 
-      // Determinar o ícone com base no tipo de arquivo
       let fileIcon = '<i class="ph-fill ph-file"></i>'
       const fileExt = file.name.split(".").pop().toLowerCase()
 
@@ -98,12 +110,12 @@ async function sendFiles() {
       fileTableBody.appendChild(row)
     })
 
-    // Adicionar ao acesso rápido
-    if (transfer.files.length > 0) {
-      const quickAccessList = document.getElementById("quickAccessList")
-      const firstFile = transfer.files[0]
-      const fileExt = firstFile.name.split(".").pop().toLowerCase()
+    // Acesso rápido - limpar antes
+    const quickAccessList = document.getElementById("quickAccessList")
+    quickAccessList.innerHTML = ""
 
+    transfer.files.forEach((file) => {
+      const fileExt = file.name.split(".").pop().toLowerCase()
       let fileIcon = '<i class="ph-fill ph-file"></i>'
 
       if (["jpg", "jpeg", "png", "gif", "svg", "webp"].includes(fileExt)) {
@@ -118,20 +130,16 @@ async function sendFiles() {
         fileIcon = '<i class="ph-fill ph-file-text"></i>'
       }
 
-      // Adicionar ao início da lista
       const newItem = document.createElement("li")
       newItem.innerHTML = fileIcon
       quickAccessList.insertBefore(newItem, quickAccessList.firstChild)
 
       const newTitle = document.createElement("h5")
-      newTitle.textContent = firstFile.name
+      newTitle.textContent = file.name
       quickAccessList.insertBefore(newTitle, quickAccessList.childNodes[1])
-    }
+    })
 
-    // Resetar o input de arquivo
     fileInput.value = ""
-
-    // Habilitar o botão após um tempo
     setTimeout(() => {
       sendButton.disabled = false
     }, 2000)
@@ -139,20 +147,19 @@ async function sendFiles() {
     console.error("Erro no upload:", error)
     statusText.textContent = "Erro ao enviar os arquivos."
     progress.style.backgroundColor = "var(--color-error)"
+    sendButton.textContent = "Tentar novamente"
 
-    // Habilitar o botão após um tempo
     setTimeout(() => {
       sendButton.disabled = false
     }, 2000)
   }
 }
 
-// Adicionar evento de drag and drop para a área de upload
+// Drag and Drop
 document.addEventListener("DOMContentLoaded", () => {
   const dropzone = document.getElementById("dropzone")
   const fileInput = document.getElementById("fileInput")
 
-  // Eventos de drag and drop
   ;["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropzone.addEventListener(eventName, preventDefaults, false)
   })
@@ -161,29 +168,25 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault()
     e.stopPropagation()
   }
+
   ;["dragenter", "dragover"].forEach((eventName) => {
-    dropzone.addEventListener(eventName, highlight, false)
+    dropzone.addEventListener(eventName, () => {
+      dropzone.classList.add("drag-over")
+    }, false)
   })
+
   ;["dragleave", "drop"].forEach((eventName) => {
-    dropzone.addEventListener(eventName, unhighlight, false)
+    dropzone.addEventListener(eventName, () => {
+      dropzone.classList.remove("drag-over")
+    }, false)
   })
 
-  function highlight() {
-    dropzone.classList.add("drag-over")
-  }
-
-  function unhighlight() {
-    dropzone.classList.remove("drag-over")
-  }
-
-  dropzone.addEventListener("drop", handleDrop, false)
-
-  function handleDrop(e) {
+  dropzone.addEventListener("drop", (e) => {
     const dt = e.dataTransfer
     const files = dt.files
     fileInput.files = files
-  }
+  }, false)
 })
 
-// Adicionar evento de clique ao botão de envio
+// Clique no botão
 document.getElementById("sendButton").addEventListener("click", sendFiles)
