@@ -44,7 +44,7 @@ function upload() {
 
   const su = new SmashUploader({
     region: "us-east-1",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", // token cortado por segurança
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MWJmNTRkLTc3ZjktNGU4OC1hYzNmLTcwZjNkYmQ1YTdmNi1ldSIsInVzZXJuYW1lIjoiYTk4MTIzYmEtOTdjYS00OTE2LWIwN2QtYjM1MWEwYWFmZmY1IiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQzNTIyMCwiZXhwIjo0OTAyMTk1MjIwfQ.hILwfE6Xz90J5VBWOP33I3edqSS5DqXJyLRgH6wVDT8",
     domain: "https://mh-nuvem0729.fromsmash.com/pt",
   });
 
