@@ -1,94 +1,103 @@
 document.addEventListener("DOMContentLoaded", () => {
-  let nomeUsuario = ""; // Ou valor vindo de login
-  nomeUsuario = nomeUsuario || "Visitante";
+  // Configurar o nome do usuário
+  const userName = document.getElementById("userName")
+  userName.textContent = "Usuário"
 
-  const nomeUsuarioElement = document.getElementById("userName");
-  if (nomeUsuarioElement) {
-    nomeUsuarioElement.textContent = `Olá, ${nomeUsuario}`;
+  // Configurar o progresso do armazenamento
+  const progressCircle = document.querySelector(".progress-circle .progress")
+  const progressText = document.querySelector(".progress-text")
+
+  // Calcular a porcentagem de armazenamento usado (1.05GB de 5GB = 21%)
+  const storageUsed = 1.05
+  const storageTotal = 5
+  const storagePercentage = (storageUsed / storageTotal) * 100
+
+  // Atualizar o círculo de progresso
+  const circumference = 2 * Math.PI * 50 // 2πr, onde r = 50
+  progressCircle.style.strokeDasharray = circumference
+  progressCircle.style.strokeDashoffset = circumference - (circumference * storagePercentage) / 100
+
+  // Atualizar o texto de progresso
+  progressText.textContent = `${Math.round(storagePercentage)}%`
+
+  // Configurar o drag and drop para a área de upload
+  const dropzone = document.getElementById("dropzone")
+  const fileInput = document.getElementById("fileInput")
+  const sendButton = document.getElementById("sendButton")
+
+  // Desabilitar o botão de envio inicialmente
+  sendButton.disabled = true
+
+  // Eventos de drag and drop
+  ;["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    dropzone.addEventListener(eventName, preventDefaults, false)
+  })
+
+  function preventDefaults(e) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  ;["dragenter", "dragover"].forEach((eventName) => {
+    dropzone.addEventListener(eventName, highlight, false)
+  })
+  ;["dragleave", "drop"].forEach((eventName) => {
+    dropzone.addEventListener(eventName, unhighlight, false)
+  })
+
+  function highlight() {
+    dropzone.classList.add("drag-over")
   }
 
-  // Exibir o progresso do armazenamento
-  function setProgress(percent) {
-    const circle = document.querySelector('.progress');
-    const text = document.getElementById('progress-text');
-
-    const radius = 50;
-    const circumference = 2 * Math.PI * radius;
-    const offset = circumference - (percent / 100) * circumference;
-
-    if (circle && text) {
-      circle.style.strokeDashoffset = offset;
-      text.textContent = `${percent.toFixed(0)}%`;
-    }
+  function unhighlight() {
+    dropzone.classList.remove("drag-over")
   }
 
-  // Exemplo de dados
-  const usado = 3.2; // em GB
-  const total = 15;  // em GB
-  const percentual = (usado / total) * 100;
+  dropzone.addEventListener("drop", handleDrop, false)
 
-  setProgress(percentual);
-});
+  function handleDrop(e) {
+    const dt = e.dataTransfer
+    const files = dt.files
+    fileInput.files = files
+    updateFileList(files)
+  }
 
-// Função para ativar a exibição do botão de envio e a barra de progresso
-function handleFileSelection() {
-  const fileInput = document.getElementById('fileInput');
-  const sendButton = document.getElementById('sendButton');
-  const progressBar = document.getElementById('progressBar');
-  const uploadStatus = document.getElementById('uploadStatus');
-  
-  // Exibe a barra de progresso e o botão de envio
-  progressBar.style.display = 'block';
-  sendButton.style.display = 'inline-block';
-  uploadStatus.style.display = 'none'; // Oculta o status de upload até que os arquivos sejam enviados
-  
-  // Quando arquivos são selecionados, o botão de enviar está visível
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files.length > 0) {
-      sendButton.style.display = 'inline-block';
+  // Atualizar quando arquivos são selecionados via input
+  fileInput.addEventListener("change", function () {
+    updateFileList(this.files)
+  })
+
+  function updateFileList(files) {
+    if (files.length > 0) {
+      sendButton.disabled = false
     } else {
-      sendButton.style.display = 'none';
+      sendButton.disabled = true
     }
-  });
-}
-
-// Função para enviar os arquivos
-function sendFiles() {
-  const fileInput = document.getElementById('fileInput');
-  const progress = document.getElementById('progress');
-  const uploadStatus = document.getElementById('uploadStatus');
-  const statusText = document.getElementById('statusText');
-
-  // Exemplo de envio
-  const formData = new FormData();
-  for (let i = 0; i < fileInput.files.length; i++) {
-    formData.append('files[]', fileInput.files[i]);
   }
 
-  // Exemplo de chamada para API (substitua com seu código de envio real)
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', 'sua-api-de-upload-aqui', true);
-  
-  // Atualiza a barra de progresso enquanto o arquivo é carregado
-  xhr.upload.onprogress = function(event) {
-    if (event.lengthComputable) {
-      const percent = (event.loaded / event.total) * 100;
-      progress.style.width = percent + '%';
-    }
-  };
+  // Função para buscar arquivos
+  window.searchFiles = () => {
+    const searchInput = document.getElementById("searchInput")
+    const searchTerm = searchInput.value.toLowerCase()
+    const fileRows = document.querySelectorAll("#fileTableBody tr")
 
-  // Exibe a mensagem de status
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      statusText.textContent = 'Upload concluído com sucesso!';
-    } else {
-      statusText.textContent = 'Erro no upload!';
-    }
-    uploadStatus.style.display = 'block'; // Exibe a mensagem de status
-  };
+    fileRows.forEach((row) => {
+      const fileName = row.querySelector("td:first-child").textContent.toLowerCase()
+      if (fileName.includes(searchTerm)) {
+        row.style.display = ""
+      } else {
+        row.style.display = "none"
+      }
+    })
+  }
+})
 
-  xhr.send(formData);
+// Função para formatar o tamanho do arquivo
+function formatFileSize(bytes) {
+  if (bytes === 0) return "0 Bytes"
+
+  const k = 1024
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"]
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+  return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
 }
-
-// Conecta a função de seleção de arquivos
-document.getElementById('fileInput').addEventListener('change', handleFileSelection);
