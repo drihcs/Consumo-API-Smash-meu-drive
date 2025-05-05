@@ -22,7 +22,8 @@ async function upload() {
   // Inicializa o uploader
   const su = new SmashUploader({
     region: "us-east-1",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // Substitua por seu token real
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+    domain: "mh-nuvem0729.fromsmash.com",
   });
 
   // Prepara os arquivos para envio
