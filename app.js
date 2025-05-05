@@ -1,55 +1,71 @@
-    async function upload() {
-      const fileInput = document.getElementById("uploadInput");
-      const tabela = document.getElementById("tabelaArquivos");
-      const corpoTabela = document.getElementById("corpoTabelaArquivos");
-      const mensagemCarregando = document.getElementById("mensagemCarregando");
-      const mensagemErro = document.getElementById("mensagemErro");
+async function upload() {
+  const fileInput = document.getElementById("uploadInput");
+  const tabela = document.getElementById("tabelaArquivos");
+  const corpoTabela = document.getElementById("corpoTabelaArquivos");
+  const mensagemCarregando = document.getElementById("mensagemCarregando");
+  const mensagemErro = document.getElementById("mensagemErro");
 
-      mensagemCarregando.classList.remove("hidden");
-      mensagemErro.classList.add("hidden");
-      corpoTabela.innerHTML = "";
+  // Limpa estados anteriores
+  mensagemCarregando.classList.remove("hidden");
+  mensagemErro.classList.add("hidden");
+  mensagemErro.textContent = "";
+  corpoTabela.innerHTML = "";
 
-      const su = new SmashUploader({
-        region: "us-east-1",
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-      });
+  // Verifica se há arquivos selecionados
+  if (fileInput.files.length === 0) {
+    mensagemCarregando.classList.add("hidden");
+    mensagemErro.classList.remove("hidden");
+    mensagemErro.textContent = "Selecione pelo menos um arquivo.";
+    return;
+  }
 
-      const parsedFiles = [...fileInput.files].map(file => ({
-        name: file.webkitRelativePath,
-        file
-      }));
+  // Inicializa o uploader
+  const su = new SmashUploader({
+    region: "us-east-1",
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." // Substitua por seu token real
+  });
 
-      try {
-        const transfer = await su.upload({
-          files: parsedFiles,
-          domain: "mh-nuvem0729.fromsmash.com"
-        });
+  // Prepara os arquivos para envio
+  const parsedFiles = [...fileInput.files].map(file => ({
+    name: file.webkitRelativePath || file.name,
+    file
+  }));
 
-        mensagemCarregando.classList.add("hidden");
-        tabela.classList.remove("hidden");
+  try {
+    const transfer = await su.upload({
+      files: parsedFiles,
+      domain: "mh-nuvem0729.fromsmash.com"
+    });
 
-        transfer.files.forEach(file => {
-          const linha = document.createElement("tr");
-          const fileUrl = `https://${transfer.domain}/${file.path}`;
+    mensagemCarregando.classList.add("hidden");
+    tabela.classList.remove("hidden");
 
-          linha.innerHTML = `
-            <td><a href="${fileUrl}" target="_blank">${file.name}</a></td>
-            <td>${(file.size / 1024).toFixed(2)} KB</td>
-            <td>Enviado com sucesso</td>
-          `;
-          corpoTabela.appendChild(linha);
-        });
+    // Exibe arquivos na tabela
+    transfer.files.forEach(file => {
+      const linha = document.createElement("tr");
+      const fileUrl = `https://${transfer.domain}/${file.path}`;
 
-        console.log("Transferência concluída:", transfer);
+      linha.innerHTML = `
+        <td><a href="${fileUrl}" target="_blank">${file.name}</a></td>
+        <td>${(file.size / 1024).toFixed(2)} KB</td>
+        <td>Enviado com sucesso</td>
+      `;
+      corpoTabela.appendChild(linha);
+    });
 
-      } catch (error) {
-        mensagemCarregando.classList.add("hidden");
-        mensagemErro.classList.remove("hidden");
-        mensagemErro.textContent = "Erro ao enviar arquivos.";
-        console.error("Erro no upload:", error);
-      }
+    console.log("Transferência concluída:", transfer);
 
-      su.on('progress', (event) => {
-        console.log("Progresso:", event.data.progress.percent + "%");
-      });
-    }
+  } catch (error) {
+    mensagemCarregando.classList.add("hidden");
+    mensagemErro.classList.remove("hidden");
+    mensagemErro.textContent = "Erro ao enviar arquivos.";
+    console.error("Erro no upload:", error);
+  }
+
+  // Progresso do upload (opcional)
+  su.on('progress', (event) => {
+    const percent = event.data.progress.percent;
+    console.log(`Progresso: ${percent}%`);
+    // Aqui você pode atualizar uma barra de progresso visual, se quiser
+  });
+}
