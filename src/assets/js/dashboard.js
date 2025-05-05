@@ -29,3 +29,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setProgress(percentual);
 });
+
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("fileInput");
+
+dropzone.addEventListener("dragover", function (e) {
+  e.preventDefault(); // Permite soltar
+  dropzone.classList.add("dragover");
+});
+
+dropzone.addEventListener("dragleave", function () {
+  dropzone.classList.remove("dragover");
+});
+
+dropzone.addEventListener("drop", function (e) {
+  e.preventDefault();
+  dropzone.classList.remove("dragover");
+
+  const files = e.dataTransfer.files;
+  fileInput.files = files;
+
+  upload(files);
+});
