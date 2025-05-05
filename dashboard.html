@@ -104,10 +104,30 @@
       <p>Arraste e solte os arquivos aqui ou clique para selecionar</p>
       <input type="file" id="fileInput" multiple hidden />
       <button onclick="document.getElementById('fileInput').click()">Selecionar arquivos</button>
-      
-      <div class="progress-bar" id="progressBar" style="display: none;">
-        <div class="progress" id="progress"></div>
+            
+      <div class="selected-files" id="selectedFiles">
+        <p>Nenhum arquivo selecionado</p>
+        <p id="fileCount">0 arquivos selecionados</p>
+        <button id="clearFilesButton" class="secondary-button" style="display: none;">Limpar seleção</button>
       </div>
+      
+      <div class="preview-container" id="previewContainer"></div>
+      
+      <div class="progress-container" id="progressContainer" style="display: none;">
+        <div class="progress-info">
+          <span id="progressText">0%</span>
+          <span id="progressStatus">Enviando...</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress" id="progressBar"></div>
+        </div>
+      </div>
+      
+      <div class="card-footer">
+        <button class="secondary-button" id="cancelButton" disabled>Cancelar</button>
+        <button class="primary-button" id="uploadButton" onclick="upload()">Enviar</button>
+      </div>
+      
       <div class="upload-status" id="uploadStatus" style="display: none;">
         <p id="statusText"></p>
       </div>
@@ -118,6 +138,7 @@
     </div>
 
     <section class="file-list">
+      <p class="empty-message">Nenhum arquivo enviado ainda</p>
       <h4>Arquivos Enviados</h4>
       <table>
         <thead>
@@ -169,6 +190,7 @@
   <script type="module" src="src/assets/js/dashboard.js"></script>
   <script src="src/assets/js/toggle-dashboard.js"></script>
   <script src="app.js"></script>
+  <script src="src/assets/js/smash-uploader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fromsmash/smash-uploader@latest/dist/umd/smash-uploader.min.js"></script>
 </body>
 

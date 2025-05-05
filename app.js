@@ -1,4 +1,4 @@
-import SmashUploader from "./smash-uploader.js"
+import SmashUploader from "src/assets/js/smash-uploader.js"
 
 // Função para formatar o tamanho dos arquivos
 function formatFileSize(bytes, si = false, dp = 1) {
