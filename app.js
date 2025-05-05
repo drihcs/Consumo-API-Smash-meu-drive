@@ -182,9 +182,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const dt = e.dataTransfer
     const files = dt.files
     fileInput.files = files
-
-    // Habilitar o botão de envio se houver arquivos
-    const sendButton = document.getElementById("sendButton")
-    sendButton.disabled = files.length === 0
   }
 })
+
+// Adicionar evento de clique ao botão de envio
+document.getElementById("sendButton").addEventListener("click", sendFiles)
