@@ -1,36 +1,26 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const body = document.body;
-    const themeToggle = document.getElementById("themeToggle");
-    const sunIcon = document.getElementById("sunIcon");
-    const moonIcon = document.getElementById("moonIcon");
-  
-    // Tema inicial: escuro
-    const currentTheme = localStorage.getItem("theme") || "dark";
-    body.classList.add(currentTheme);
-  
-    // Mostrar ícone de acordo com o tema atual
-    if (currentTheme === "dark") {
-      sunIcon.style.display = "inline-block"; // mostra o sol no tema escuro
-      moonIcon.style.display = "none";
-    } else {
-      sunIcon.style.display = "none";
-      moonIcon.style.display = "inline-block"; // mostra a lua no tema claro
-    }
-  
-    themeToggle.addEventListener("click", () => {
-      const isDarkNow = body.classList.toggle("light"); // ativa ou desativa a classe light
-      body.classList.toggle("dark", !isDarkNow); // mantém dark se não for light
-  
-      // Salva o tema atualizado
-      localStorage.setItem("theme", isDarkNow ? "light" : "dark");
-  
-      // Troca os ícones
-      if (isDarkNow) {
-        sunIcon.style.display = "none";       // no tema claro, sol some
-        moonIcon.style.display = "inline-block"; // lua aparece
-      } else {
-        sunIcon.style.display = "inline-block"; // no tema escuro, sol aparece
-        moonIcon.style.display = "none";       // lua some
-      }
-    });
-  });
+// Seleciona o botão de alternância de tema
+const themeToggleButton = document.getElementById('themeToggle');
+
+// Verifica se o tema preferido do usuário está armazenado no localStorage
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+  document.body.classList.add(savedTheme);
+} else {
+  // Se não houver tema preferido, define o escuro como tema principal (padrão)
+  document.body.classList.add('dark');
+}
+
+// Função para alternar entre os temas
+themeToggleButton.addEventListener('click', () => {
+  // Alterna entre o tema escuro e o tema claro
+  if (document.body.classList.contains('dark')) {
+    document.body.classList.remove('dark');
+    document.body.classList.add('light');
+    localStorage.setItem('theme', 'light');  // Armazena o tema claro
+  } else {
+    document.body.classList.remove('light');
+    document.body.classList.add('dark');
+    localStorage.setItem('theme', 'dark');  // Armazena o tema escuro
+  }
+});
+
