@@ -65,38 +65,59 @@ function upload() {
     progressText.textContent = percent + "%";
   });
 
-  su.upload({ files: files })
-    .then((transfer) => {
-      const uploadedFile = transfer.files[0];
-      const downloadLink = uploadedFile.url;
+  su.upload({ files })
+    .then((result) => {
+      const transferUrl = result?.transfer?.transferUrl;
 
-      showMessage("Arquivo enviado com sucesso!", "success");
-      progressStatus.textContent = "Concluído";
+      if (transferUrl) {
+        // Sucesso no upload
+        progressBar.style.width = "100%";
+        progressText.textContent = "Upload concluído!";
 
-      const row = document.createElement("tr");
-      const nameCell = document.createElement("td");
-      const link = document.createElement("a");
-      link.href = downloadLink;
-      link.textContent = uploadedFile.name || "Arquivo";
-      link.target = "_blank";
-      nameCell.appendChild(link);
+        // Exibe a URL de download do arquivo
+        console.log("Link do arquivo enviado:", transferUrl);
 
-      const sizeCell = document.createElement("td");
-      sizeCell.textContent = formatFileSize(uploadedFile.size || 0);
+        // Adiciona o arquivo à tabela
+        const uploadedFile = result?.transfer?.files[0];
+        if (uploadedFile) {
+          const row = document.createElement("tr");
+          const nameCell = document.createElement("td");
+          const link = document.createElement("a");
+          link.href = transferUrl;
+          link.textContent = uploadedFile.name || "Arquivo";
+          link.target = "_blank";
+          nameCell.appendChild(link);
 
-      const statusCell = document.createElement("td");
-      statusCell.textContent = "Enviado";
+          const sizeCell = document.createElement("td");
+          sizeCell.textContent = formatFileSize(uploadedFile.size);
 
-      row.appendChild(nameCell);
-      row.appendChild(sizeCell);
-      row.appendChild(statusCell);
+          const statusCell = document.createElement("td");
+          statusCell.textContent = "Enviado";
 
-      fileTableBody.appendChild(row);
+          row.appendChild(nameCell);
+          row.appendChild(sizeCell);
+          row.appendChild(statusCell);
+
+          fileTableBody.appendChild(row);
+        }
+      } else {
+        console.error("Erro: transferUrl não encontrado.");
+      }
+
+      // Esconde a barra de progresso após 3 segundos
+      setTimeout(() => {
+        progressContainer.style.display = "none";
+      }, 3000);
     })
     .catch((error) => {
       console.error("Erro durante o upload:", error);
-      showMessage("Erro ao enviar o arquivo. Tente novamente.", "error");
-      progressStatus.textContent = "Erro";
+      progressBar.style.width = "100%";
+      progressBar.style.backgroundColor = "var(--error-text)";
+      progressText.textContent = "Erro ao enviar arquivos";
+
+      setTimeout(() => {
+        progressContainer.style.display = "none";
+      }, 3000);
     });
 }
 
