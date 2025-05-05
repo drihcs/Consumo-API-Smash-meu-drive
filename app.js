@@ -5,26 +5,34 @@ async function upload() {
   const progressText = document.getElementById("progressText");
   const progressStatus = document.getElementById("progressStatus");
 
+  // Verificar se arquivos foram selecionados
+  if (fileInput.files.length === 0) {
+    alert("Por favor, selecione um arquivo para enviar.");
+    return; // Se nenhum arquivo foi selecionado, interrompe a execução
+  }
+
   // Exibe a barra de progresso
   progressContainer.style.display = "block";
 
   const su = new SmashUploader({
     region: "us-east-1",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpXVCIsImlhdCI6MTYxNjQ5NzYwMCwiZXhwIjoxNjE2NTY5NjAwfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5ceyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjY2NTM5LWJmYzMtNDYxYy05ZWRhLTI3YjY5N2U3ODY4Yi1ldSIsInVzZXJuYW1lIjoiMGMyODBlYjItYTM2My00NWUxLWFhZmQtZmQwZjBjZTY4NDNiIiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQxMDg4MiwiZXhwIjo0OTAyMTcwODgyfQ.bAjLzkJnlzP3JFIxHNbAaNulxp1CmBK15Aaa3I8gBNs",
-    });
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYzZjY2NTM5LWJmYzMtNDYxYy05ZWRhLTI3YjY5N2U3ODY4Yi1ldSIsInVzZXJuYW1lIjoiMGMyODBlYjItYTM2My00NWUxLWFhZmQtZmQwZjBjZTY4NDNiIiwicmVnaW9uIjoidXMtZWFzdC0xIiwiaXAiOiIxNzcuMzcuMTM2Ljk1Iiwic2NvcGUiOiJOb25lIiwiYWNjb3VudCI6ImM4Zjk0ZjNiLTI4NWYtNGQ2Yy1iYTA5LTdlYTkwMTQzNDgxYS1lYSIsImlhdCI6MTc0NjQxMDg4MiwiZXhwIjo0OTAyMTcwODgyfQ.bAjLzkJnlzP3JFIxHNbAaNulxp1CmBK15Aaa3I8gBNs",
+  });
 
   const files = [...fileInput.files];
 
   try {
-    const transfer = await su.upload({ files: files });
-
+    // Registra o evento de progresso antes de começar o upload
     su.on('progress', (event) => {
       const percent = Math.floor(event.data.progress.percent);
       progressBar.style.width = percent + "%"; // Atualiza a barra de progresso
       progressText.textContent = percent + "%"; // Exibe a porcentagem
     });
 
-    // Após o upload ser completado
+    // Inicia o upload
+    const transfer = await su.upload({ files: files });
+
+    // Ação após o upload ser concluído
     transfer.on('end', () => {
       progressStatus.textContent = "Upload Concluído!";
       setTimeout(() => {
